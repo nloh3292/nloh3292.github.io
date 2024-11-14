@@ -1,81 +1,69 @@
 ---
 layout: page
-title: project 1
-description: with background image
-img: assets/img/12.jpg
+title: Predicting COVID-19 Algorithms
+description: By Nathan Loh and Nikolaus Schultze
+img: assets/img/project1/covid_cover.jpg
 importance: 1
-category: work
-related_publications: true
+category: Academic
+related_publications: false
 ---
 
-Every project has a beautiful feature showcase page.
-It's easy to include images in a flexible 3-column grid format.
-Make your photos 1/3, 2/3, or full width.
+<h2 style="font-size: 1.5em; font-weight: normal;">Project Description</h2>
+COVID-19 has significantly shaped today's society, raising awareness about the dangers posed by bacteria, viruses, and diseases. One major challenge highlighted by the pandemic is the strain on hospital staffing and resources, as many were diverted to handle the influx of COVID-19 patients. This project aims to address some of these concerns by exploring the limitations of current COVID-19 testing methods and offering a simpler alternative to help reduce the spread of the virus.
 
-To give your project a background in the portfolio page, just add the img tag to the front matter like so:
+Current COVID-19 tests, such as Rapid Antigen and PCR tests, can provide inconsistent results. This project aims to develop a simple COVID-19 predictor that can help individuals better assess their condition when uncertain about their illness. If an individual is predicted to have COVID-19, they should quarantine themselves rather than go out to get tested and risk spreading the virus. However, if an individual is predicted not to have COVID-19, they should proceed with proper testing to check for false positives. Ultimately, this approach can reduce the number of potentially sick individuals in public spaces and reduce the strain on testing resources.
 
-    ---
-    layout: page
-    title: project
-    description: a project with a background image
-    img: /assets/img/12.jpg
-    ---
+This project involves predicting positive and negative COVID-19 cases based on symptoms using various algorithms, including decision tree (DT), logistic regression (LR), regular regression (RR), k-nearest neighbor (KNN), as well as combinations of these methods. The combination approach utilizes a mix of DT, LR, and KNN algorithms, each trained individually on the same data set before being compared to determine the final prediction. Two distinct methods were used in this approach. The first method determines the final prediction based on the majority vote from the outputs of each algorithm. In contrast, the second method predicts COVID-positive if any of the algorithms produce a positive result. The dataset utilized for this project was sourced from Kaggle, titled <a href="https://www.kaggle.com/datasets/hemanthhari/symptoms-and-covid-presence">Symptoms and COVID Presence</a> by Hemanth Harikrishnan.
+
+
+<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Feature Selection and Model Description</h2>
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/3.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/project1/covid_co_matrix.png" title="Correlation Matrix" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
-<div class="caption">
-    Caption photos easily. On the left, a road goes through a tunnel. Middle, leaves artistically fall in a hipster photoshoot. Right, in another hipster photoshoot, a lumberjack grasps a handful of pine needles.
-</div>
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    This image can also have a caption. It's like magic.
+<div class="caption" style="font-style: italic; font-size: 0.85em;">
+    Figure 1. Correlation matrix of predictor and response variables. Two variables show strong correlation if the coefficient value is closer to 1 and -1, and a weak correlation if the value is closer to 0.
 </div>
 
-You can also put regular text between your rows of images, even citations {% cite einstein1950meaning %}.
-Say you wanted to write a bit about your project before you posted the rest of the images.
-You describe how you toiled, sweated, _bled_ for your project, and then... you reveal its glory in the next row of images.
 
-<div class="row justify-content-sm-center">
-    <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm-4 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    You can also have artistically styled 2/3 + 1/3 images, like these.
-</div>
+Through feature selection, symptoms that have coefficient values closer to 0 with the response variable are removed. These symptoms include Runny Nose, Headache, and Fatigue, which can also be symptoms commonly seen in other illnesses. After removing the weakly correlated variables, the data is randomly split into a training and testing set, where each algorithm is trained and tested five times before averaging each of the results: accuracy, precision, sensitivity, and specificity. To ensure that the machine can read and interpret the data, all values were switched from "yes" and "no" to 1 and 0. This also allows the data to be normalized and not give certain features a stronger influence on the decisions. This also helps with addressing the issues of regular regression being a continuous predictor by restricting its output to be relative to the response class values of 1 and 0.
 
-The code is simple.
-Just wrap your images with `<div class="col-sm">` and place them inside `<div class="row">` (read more about the <a href="https://getbootstrap.com/docs/4.4/layout/grid/">Bootstrap Grid</a> system).
-To make images responsive, add `img-fluid` class to each; for rounded corners and shadows use `rounded` and `z-depth-1` classes.
-Here's the code for the last row of images above:
+All algorithms are created through the scikit-learn library. Regular regression is typically not used in classification problems; however, we were curious how effective it can still predict classes. As such, we use a similar approach to logistic regression where the final prediction is set to class 1 if the value is greater than or equal to 0.5, else set the class to 0. The purpose of creating the two combination methods were to test if the accuracy and sensitivity would improve at the cost of increasing the runtime (need to train three models vs. just one). Thus, we create a method (Method 1) that would be aimed at improving accuracy through setting the output as the majority, while another method (method 2) is used to determine if we can improve the sensitivity at a cost of slightly decreasing the accuracy by setting all outputs as true if any algorithm predicted COVID-positive.
+
+
+<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Results</h2>
 
 {% raw %}
-
-```html
-<div class="row justify-content-sm-center">
-  <div class="col-sm-8 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-  <div class="col-sm-4 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-</div>
-```
-
+<table
+  class="table table-bordered table-striped table-hover"
+  style="width: 100%; margin: 0 auto; text-align: center;">
+  <thead>
+    <tr>
+      <th data-field="metric" data-halign="center" data-align="center" data-sortable="true">Metric</th>
+      <th data-field="regular" data-halign="center" data-align="center" data-sortable="true">RR</th>
+      <th data-field="logistic" data-halign="center" data-align="center" data-sortable="true">LR</th>
+      <th data-field="decision" data-halign="center" data-align="center" data-sortable="true">DT</th>
+      <th data-field="k_nearest" data-halign="center" data-align="center" data-sortable="true">KNN</th>
+      <th data-field="combine_method1" data-halign="center" data-align="center" data-sortable="true">KNN+DT+LR Method 1</th>
+      <th data-field="combine_method2" data-halign="center" data-align="center" data-sortable="true">KNN+DT+LR Method 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Accuracy</td><td>96.06%</td><td>96.01%</td><td>96.89%</td><td>96.82%</td><td>97.19%</td><td>97.09%</td></tr>
+    <tr><td>Precision</td><td>96.26%</td><td>98.14%</td><td>98.24%</td><td>97.44%</td><td>98.25%</td><td>97.52%</td></tr>
+    <tr><td>Sensitivity</td><td>99.01%</td><td>98.14%</td><td>97.91%</td><td>98.63%</td><td>98.27%</td><td>98.93%</td></tr>
+    <tr><td>Specificity</td><td>83.21%</td><td>92.11%</td><td>92.73%</td><td>89.63%</td><td>92.57%</td><td>89.28%</td></tr>
+  </tbody>
+</table>
 {% endraw %}
+
+
+<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Discussion of Results</h2>
+In the final comparison for each algorithm, we will primarily examine the accuracy and the sensitivity because it deals with false negative reports. False negative reports are important as we want to avoid predicting a person to be COVID-negative when they are COVID-positive. On the other hand, an individual who is predicted to not have COVID when they do will increase the spread of the virus. From the results, linear regression has the lowest accuracy; however, it is still high despite its intended purpose of predicting continuous values; it has the highest sensitivity at the cost of having the lowest specificity. The algorithm (singular) that had the best accuracy was DT, followed with KNN which had higher sensitivity. When comparing the KNN with the two combination methods, it was found that both methods produced better accuracies while Method 2 had the best sensitivity. In short, the combination approach showed slight improvements compared to using a single algorithm. The first method had a lower sensitivity, while the second one had a higher one. If we had to choose between the two methods, the second method would be better, as it sacrifices a small amount of accuracy for higher sensitivity: fewer false negative predictions. In general, KNN+DT+LR Method 1 had the best accuracy and precision, Regular Regression had the best sensitivity, and Decision Tree had the best specificity.
+
+Future work for this project includes in depth analysis of each feature and their correlations between other predictor variables, implementation of an interactive website or application, and introduction of more data. Despite performing feature selection through the analysis of the correlation matrix, further research and examination can be done to see if certain symptoms have an impact on other symptoms. Rather than select features that only have a direct impact to the response variable, it may be wise to also incorporate predictors that have correlations with other predictors. The implementation of an interactive website or application will be the next step in deploying the algorithm to the public and allow them to start self-diagnosing. The final future step is to incorporate more data to improve testing results. This can include adding more features to examining how COVID may be different in other countries and regions. This is important as certain strains of the virus may mutate, cause different symptoms, and dominate in specific regions, causing this algorithm to fail.
+
+<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Project Repository</h2>
+<a href="https://github.com/nschultze/cs584project">Project Repository Link</a>
