@@ -1,0 +1,433 @@
+<!DOCTYPE HTML>
+
+<html>
+	<!-- Header -->
+    <head>
+        <title>Nathan Loh - Wildfire</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../assets/css/main.css" />
+    </head>
+
+
+    <body class="is-preload">
+		<!-- Navigation Bar -->
+		<nav class="navbar">
+			<ul>
+				<li><a href="../../index.html">About</a></li>
+				<li><a href="../../projects.html">Projects</a></li>
+				<li><a href="../../Nathan_Loh_Resume.pdf" target="_blank">CV</a></li>
+			</ul>
+		</nav>
+
+
+		<!-- Page Title -->
+		<div class="page-title">Comparison of Wildfire Detection Algorithms</div>
+		<p style="margin-top: 1em; font-size: 14px;">
+			By Matiss M. Mednis, Nathan Loh, and Nikolaus Schultze
+		</p>
+
+
+		<!-- Project description -->
+		<h2 style="font-size: 1.5em; font-weight: normal;">Project Description</h2>
+		<p>
+			Wildfires threaten ecosystems and humanity, spreading rapidly and causing significant damage. The recent Canadian wildfires highlight their global impact. 
+			Prevention and early detection are crucial to reducing the risk of uncontrollable fires. 
+			Implementing automated monitoring methods such as infrared cameras are affordable and accessible, 
+			offering the potential for early detection when fires are still manageable. <br><br>
+
+			Today's wildfire detection faces many challenges, as natural events like clouds, mists, 
+			and sunsets may mimic or distort wildfire characteristics and lead to false positives. 
+			Alternative approaches, such as satellite or infrared monitoring, provide benefits, with images covering larger areas and bypassing minor weather effects. 
+			As such, developing accurate models for early detection can significantly aid in preserving ecosystems, properties, and lives.
+		</p>
+
+
+		<!-- Data Description -->
+		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Data Set Description</h2>
+		<p>
+			The data set, <a href="https://www.kaggle.com/datasets/elmadafri/the-wildfire-dataset">The Wildfire Dataset</a>, 
+			is comprised of 2,700 aerial and ground-based images from various sources, including government databases, Flickr, and Unsplash. 
+			These images cover various environmental conditions, forest types, geographical locations, and the intricate dynamics of forest ecosystems and fire events. 
+			The main directories can be found in this data set: Training (70%), Validation (15%), and Testing (15%). 
+			In addition, two folders can be found for each directory: “nofire” folders containing 1653 images without fire and “fire” folders containing 1047 images with fire. 
+			The data set also includes images of smoke with and without fire to improve the model. 
+		</p>
+		<!-- Images of different labels -->
+		<div class="image-row">
+			<div class="image-column">
+				<img src="fire_with_smoke.jpg" alt="Fire With Visible Smoke" class="responsive-img">
+				<div class="sub-caption">(a) Fire with visible smoke</div>
+			</div>
+			<div class="image-column">
+				<img src="fire_only_smoke.jpg" alt="Smoke No Fire" class="responsive-img">
+				<div class="sub-caption">(b) Only smoke, no visible flames</div>
+			</div>
+			<div class="image-column">
+				<img src="forest_nofire.jpg" alt="No Fire" class="responsive-img">
+				<div class="sub-caption">(c) Forest scene with no fire</div>
+			</div>
+		</div>
+		<div class="caption">
+			Figure 1. This set of images demonstrates different wildfire scenarios: fire with smoke, smoke only, and a forest without fire. 
+			Each highlights distinct visual cues for wildfire detection.
+		</div>
+
+		<!-- Additional Images (different dataset) -->
+		<p>
+			<br>An issue with finding data for this project is the need for available images of wildfires, as they do not often occur. 
+			We introduce this problem by implementing a second data set, <a href="https://www.kaggle.com/datasets/phylake1337/fire-dataset">FIRE Dataset</a>, composed of fire images. 
+			This way, we can test if our model will improve after adding additional images of fire and whether our original model can accurately classify these images. 
+			This new data set consists of images of fire and no fire, however, we will only implement the images with fire. 
+			Images of fire can be found in all environments like a forest and a house.
+		</p>
+
+		<div class="image-row">
+			<div class="image-column">
+				<img src="add_fire1.jpg" alt="Additional Fire 1" class="responsive-img">
+				<div class="sub-caption">(a) Fire on mountain</div>
+			</div>
+			<div class="image-column">
+				<img src="add_fire2.jpg" alt="Additional Fire 2" class="responsive-img">
+				<div class="sub-caption">(b) House fire</div>
+			</div>
+			<div class="image-column">
+				<img src="add_fire3.jpg" alt="Additional Fire 3" class="responsive-img">
+				<div class="sub-caption">(c) Forest fire</div>
+			</div>
+		</div>
+		<div class="caption">
+			Figure 2. This set of images provides additional examples of fire scenarios to help address the issue of limited fire data.
+		</div>
+
+
+		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Model Description</h2>
+		<p>
+			In this project, we utilize and compare CNN architectures, Hugging Face's ViT model, 
+			and a hybrid CNN and transformer architecture to approach wildfire detection in RGB images on the wildfire dataset. 
+			We collect and compare all models' accuracy, F1, recall, and precision metrics. For the ViT and hybrid models, 
+			we additionally train them on additional fire dataset images and analyze their final performance on the test set with that additional data in training.
+		</p>
+
+		<h3 style="font-size: 1.15em; font-weight: normal; margin-top: 20px; color: #888;">I. Simple CNN Model</h3>
+		<p>
+			The Simple CNN model comprises three convolutional layers, each followed by max-pooling, effectively capturing hierarchical features from the input images. 
+			The model contains ReLU activations in the fully connected layers, including a sigmoid activation in the output layer, 
+			and is fine-tuned with the Adam optimizer using binary cross entropy as the loss function.
+		</p>
+		
+		<h3 style="font-size: 1.15em; font-weight: normal; margin-top: 20px; color: #888;">II. Complex CNN Model</h3>
+		<p>
+			The Complex CNN model contains four convolutional layers with progressive max-pooling, incorporating ReLU activations in its fully connected layers. 
+			It introduces dropout layers (50% and 30% dropout rates) for regularization, with a sigmoid activation in the output layer. 
+			The model is optimized using the Adam optimizer with binary cross entropy as the loss function.
+		</p>
+
+		<h3 style="font-size: 1.15em; font-weight: normal; margin-top: 20px; color: #888;">III. Pre-trained CNN Model</h3>
+		<p>
+			The pre-trained CNN model seamlessly utilizes a pre-trained VGG16 with 'imagenet' weights. 
+			Allowing the pre-trained layers to remain fixed, a flattened layer connects to a dense layer comprising 128 units with a ReLU activation. 
+			The final layer, which tailors the model for binary classification, contains a sigmoid activation—optimized with the Adam optimizer.
+		</p>
+
+		<h3 style="font-size: 1.15em; font-weight: normal; margin-top: 20px; color: #888;">IV. ViT Model</h3>
+		<p>
+			The ViT model utilized in this project is derived from 
+			<a href="https://huggingface.co/google/vit-base-patch16-224">Google's Hugging Face ViT-base-path16-224 model</a>. 
+			It is pre-trained on ImageNet-21k at a resolution of 224x224. The images used to train are rescaled and transformed accordingly, 
+			with different sizes included in the hypertuning section to optimize performance. 
+			Twelve images encoded as RGBA (4 channels) were removed due to incompatible data types. 
+			Other sets of models are created to incorporate the additional fire images. 
+			Each model is trained with 4 epochs, with the evaluation of the validation set every 50 steps.
+		</p>
+
+		<h3 style="font-size: 1.15em; font-weight: normal; margin-top: 20px; color: #888;">V. Hybrid Model</h3>
+		<p>
+			The hybrid model is comprised of a CNN and a transformer. This design differs from the ViT model by incorporating a more complex CNN layer, 
+			following a similar structure to the <a href="https://huggingface.co/docs/transformers/model_doc/cvt/">Convolutional vision Transformer (CvT)</a> architecture. 
+			The components of this structure are a pre-trained CNN model called 
+			<a href="https://keras.io/api/applications/efficientnet/">EfficientNetB0</a> and a basic transformer architecture based around a ViT. 
+			The transformer section is incorporated with patches of 32 by 32 pixels to capture local features, 
+			and multi-head attention to capture the complex relationships between distant image regions. 
+			A binary cross-entropy loss function is used as the data set consists of two target classes. 
+			A Learning rate scheduler is added to update the learning rate as it trains, allowing the feature weights to converge smoothly. 
+			Additional models were developed to accommodate separate datasets, 
+			allowing for an evaluation of the effectiveness of training with expanded image sets or testing on new data.
+		</p>
+
+
+		<!-- Model Results -->
+		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Model Results</h2>
+		<p>
+			This section shows the appropriate tables and graphs for the metrics of the models on the test set. 
+			Confusion matrices are also included to visualize the effectiveness of the models on different the different testing sets.
+		</p>
+
+		<!-- Simple CNN Results -->
+		<h3 style="font-size: 1.15em; font-weight: normal; margin-top: 20px; color: #888;">I. Simple CNN</h3>
+		<!-- Confusion Matrix -->
+		<h3 class="matrix-title">Confusion Matrix - Simple CNN</h3>
+		<div class="confusion-matrix-wrapper">
+			<div class="confusion-matrix">
+				<div class="label-axis y-axis">Actual</div>
+				<div class="label-axis x-axis">Predicted</div>
+				
+				<div class="matrix-grid">
+					<!-- Actual Positive Row -->
+					<div class="header-cell">Fire</div>
+					<div class="cell true-positive">TP<br><span>115</span></div>
+					<div class="cell false-negative">FN<br><span>44</span></div>
+			
+					<!-- Actual Negative Row -->
+					<div class="header-cell">No Fire</div>
+					<div class="cell false-positive">FP<br><span>19</span></div>
+					<div class="cell true-negative">TN<br><span>232</span></div>
+
+					<!-- Headers -->
+					<div class="empty-cell"></div>
+					<div class="header-cell">Fire</div>
+					<div class="header-cell">No Fire</div>
+				</div>
+			</div>
+		</div>
+		<figcaption class="caption" style="text-align: center; margin-bottom: 20px;">
+			Figure 3. The confusion matrix illustrates the simple CNN model's results based on the Wildfire dataset.
+		</figcaption>
+
+		<!-- Evaluation Table -->
+		<div class="table-wrapper">
+			<div class="table-container">
+				<table class="table dynamic-table table-bordered table-striped table-hover text-center">
+					<tbody>
+						<tr><td><strong>Number of Epochs</strong></td><td>20</td><td>40</td></tr>
+						<tr><td><strong>Accuracy</strong></td><td>77.56%</td><td>84.63%</td></tr>
+						<tr><td><strong>Precision</strong></td><td>84.00%</td><td>84.00%</td></tr>
+						<tr><td><strong>Recall</strong></td><td>78.00%</td><td>92.00%</td></tr>
+						<tr><td><strong>F1-Score</strong></td><td>81.00%</td><td>88.00%</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<figcaption class="caption">
+			Table 1. Metrics of simple CNN on test set for given number of epochs.
+		</figcaption>
+
+
+		<!-- Complex CNN Results -->
+		<h3 style="font-size: 1.15em; font-weight: normal; margin-top: 20px; color: #888;">II. Complex CNN</h3>
+		<!-- Confusion Matrix -->
+		<h3 class="matrix-title">Confusion Matrix - Complex CNN</h3>
+		<div class="confusion-matrix-wrapper">
+			<div class="confusion-matrix">
+				<div class="label-axis y-axis">Actual</div>
+				<div class="label-axis x-axis">Predicted</div>
+				
+				<div class="matrix-grid">
+					<!-- Actual Positive Row -->
+					<div class="header-cell">Fire</div>
+					<div class="cell true-positive">TP<br><span>119</span></div>
+					<div class="cell false-negative">FN<br><span>40</span></div>
+			
+					<!-- Actual Negative Row -->
+					<div class="header-cell">No Fire</div>
+					<div class="cell false-positive">FP<br><span>16</span></div>
+					<div class="cell true-negative">TN<br><span>235</span></div>
+
+					<!-- Headers -->
+					<div class="empty-cell"></div>
+					<div class="header-cell">Fire</div>
+					<div class="header-cell">No Fire</div>
+				</div>
+			</div>
+		</div>
+		<figcaption class="caption" style="text-align: center; margin-bottom: 20px;">
+			Figure 4. The confusion matrix illustrates the complex CNN model's results based on the Wildfire dataset.
+		</figcaption>
+
+		<!-- Evaluation Table -->
+		<div class="table-wrapper">
+			<div class="table-container">
+				<table class="table dynamic-table table-bordered table-striped table-hover text-center">
+					<tbody>
+						<tr><td><strong>Number of Epochs</strong></td><td>20</td><td>100</td></tr>
+						<tr><td><strong>Accuracy</strong></td><td>79.51%</td><td>86.34%</td></tr>
+						<tr><td><strong>Precision</strong></td><td>79.00%</td><td>85.00%</td></tr>
+						<tr><td><strong>Recall</strong></td><td>91.00%</td><td>94.00%</td></tr>
+						<tr><td><strong>F1-Score</strong></td><td>84.00%</td><td>89.00%</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<figcaption class="caption">
+			Table 2. Metrics of Complex CNN on test set for given number of epochs.
+		</figcaption>
+
+
+		<!-- Pre-trained CNN Results -->
+		<h3 style="font-size: 1.15em; font-weight: normal; margin-top: 20px; color: #888;">III. Pre-trained CNN</h3>
+		<!-- Confusion Matrix -->
+		<h3 class="matrix-title">Confusion Matrix - Pre-trained CNN</h3>
+		<div class="confusion-matrix-wrapper">
+			<div class="confusion-matrix">
+				<div class="label-axis y-axis">Actual</div>
+				<div class="label-axis x-axis">Predicted</div>
+				
+				<div class="matrix-grid">
+					<!-- Actual Positive Row -->
+					<div class="header-cell">Fire</div>
+					<div class="cell true-positive">TP<br><span>132</span></div>
+					<div class="cell false-negative">FN<br><span>27</span></div>
+			
+					<!-- Actual Negative Row -->
+					<div class="header-cell">No Fire</div>
+					<div class="cell false-positive">FP<br><span>20</span></div>
+					<div class="cell true-negative">TN<br><span>231</span></div>
+
+					<!-- Headers -->
+					<div class="empty-cell"></div>
+					<div class="header-cell">Fire</div>
+					<div class="header-cell">No Fire</div>
+				</div>
+			</div>
+		</div>
+		<figcaption class="caption" style="text-align: center; margin-bottom: 20px;">
+			Figure 5. The confusion matrix illustrates the pre-trained CNN model's results based on the Wildfire dataset.
+		</figcaption>
+
+		<!-- Evaluation Table -->
+		<div class="table-wrapper">
+			<div class="table-container">
+				<table class="table dynamic-table table-bordered table-striped table-hover text-center">
+					<tbody>
+						<tr><td><strong>Number of Epochs</strong></td><td>3</td><td>20</td></tr>
+						<tr><td><strong>Accuracy</strong></td><td>86.34%</td><td>88.54%</td></tr>
+						<tr><td><strong>Precision</strong></td><td>93.00%</td><td>90.00%</td></tr>
+						<tr><td><strong>Recall</strong></td><td>84.00%</td><td>92.00%</td></tr>
+						<tr><td><strong>F1-Score</strong></td><td>88.00%</td><td>91.00%</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<figcaption class="caption">
+			Table 3. Metrics of Pre-trained CNN on test set for given number of epochs.
+		</figcaption>
+		
+
+		<!-- VIT Results -->
+		<h3 style="font-size: 1.15em; font-weight: normal; margin-top: 20px; color: #888;">IV. Vision Transformer (ViT)</h3>
+		<!-- Evaluation Table -->
+		<div class="table-wrapper">
+			<div class="table-container">
+				<table class="table dynamic-table table-bordered table-striped table-hover text-center">
+					<tbody>
+						<tr><td><strong>Training Set</strong></td>
+							<td><strong>Original Data (Wildfire)</strong></td>
+							<td><strong>Mixed Data (Fire and Wildfire)</strong></td></tr>
+						<tr><td><strong>Accuracy</strong></td><td>97.06%</td><td>96.32%</td></tr>
+						<tr><td><strong>Precision</strong></td><td>97.09%</td><td>96.35%</td></tr>
+						<tr><td><strong>Recall</strong></td><td>97.06%</td><td>96.32%</td></tr>
+						<tr><td><strong>F1-Score</strong></td><td>97.07%</td><td>96.33%</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<figcaption class="caption">
+			Table 4. Results of the ViT model tuned to the validation set on the Wildfire dataset test set. 
+			The Training set row represents which data set was used for training. 
+			Both trained models have the same parameters and preprocessing and are tested and validated on the Wildfire dataset.
+		</figcaption>
+
+
+		<!-- Hybrid Results -->
+		<h3 style="font-size: 1.15em; font-weight: normal; margin-top: 20px; color: #888;">V. Hybrid CNN+Transformer</h3>
+		<!-- Evaluation Table -->
+		<div class="table-wrapper">
+			<div class="table-container">
+				<table class="table dynamic-table table-bordered table-striped table-hover text-center">
+					<tbody>
+						<tr><td><strong>Training Set</strong></td>
+							<td><strong>Original Data</strong></td>
+							<td><strong>Original Data</strong></td>
+							<td><strong>Original Data</strong></td>
+							<td><strong>Mixed Data</strong></td></tr>
+						<tr><td><strong>Testing Set</strong></td>
+							<td><strong>Original Data</strong></td>
+							<td><strong>Mixed Data</strong></td>
+							<td><strong>New Data</strong></td>
+							<td><strong>Original Data</strong></td></tr>
+						<tr><td><strong>Number of Epochs</strong></td><td>40</td><td>40</td><td>40</td><td>20</td></tr>
+						<tr><td><strong>Accuracy</strong></td><td>95.61%</td><td>83.68%</td><td>78.78%</td><td>95.37%</td></tr>
+						<tr><td><strong>Precision</strong></td><td>96.29%</td><td>83.40%</td><td>75.57%</td><td>96.11%</td></tr>
+						<tr><td><strong>Recall</strong></td><td>94.57%</td><td>86.63%</td><td>83.88%</td><td>94.26%</td></tr>
+						<tr><td><strong>F1-Score</strong></td><td>95.30%</td><td>83.26%</td><td>76.20%</td><td>95.03%</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<figcaption class="caption">
+			Table 5. Results of the hybrid model consisting of a pre-trained CNN and transformer on different training and testing sets. 
+			Two models were developed using the same architecture.
+			Three categories exists: original data being just the wildfire dataset, mixed data being both wildfire and fire dataset, and new data being only the fire dataset.
+			The first model is trained using only the original images, and the second model is based on a combination of the original and new images. 
+			For the testing set, there are three variations.
+		</figcaption>
+
+
+		<!-- Final Comparison of Results -->
+		<h3 style="font-size: 1.15em; font-weight: normal; margin-top: 20px;">Final Comparison of the Best Models (Wildfire Test Set)</h3>
+		<!-- Evaluation Table -->
+		<div class="table-wrapper">
+			<div class="table-container">
+				<table class="table dynamic-table table-bordered table-striped table-hover text-center">
+					<thead>
+						<tr>
+							<th>Metric</th>
+							<th>Simple CNN</th>
+							<th>Complex CNN</th>
+							<th>Pre-trained CNN</th>
+							<th>Vision Transformer (ViT)</th>
+							<th>Hybrid CNN+Transformer</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><td>Accuracy</td><td>84.63%</td><td>86.34%</td><td>88.54%</td><td>97.06%</td><td>95.61%</td></tr>
+						<tr><td>Precision</td><td>84.00%</td><td>85.00%</td><td>90.00%</td><td>97.09%</td><td>96.29%</td></tr>
+						<tr><td>Recall</td><td>92.00%</td><td>94.00%</td><td>92.00%</td><td>97.06%</td><td>94.57%</td></tr>
+						<tr><td>F1-Score</td><td>88.00%</td><td>89.00%</td><td>91.00%</td><td>97.07%</td><td>95.30%</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<figcaption class="caption">
+			Table 6. The best results of all models are put together. 
+			We compared each model's results and listed their accuracy, precision, recall, and F1 scores. 
+			As noted, there are significant improvements from CNNs to Transformers.
+		</figcaption>
+		
+
+		<!-- Repository -->
+		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Project Repository</h2>
+		<a href="https://github.com/nschultze/CS577Project" style="margin-left: 10%; display: inline-block; width: fit-content;">Project Repository Link</a>
+
+
+		<!-- Full Report -->
+		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">PDF Report</h2>
+		<p>
+			For a full report of the project, refer to the following pdf link: 
+			<a href="CS577 Final Project Report.pdf" target="_blank" style="display: inline-block; width: fit-content;">Wildfire Final Report</a>.
+		</p>
+
+
+		<!-- Footer -->
+		<footer id="footer">
+			<ul class="copyright">
+				<a>&copy; 2025 Nathan Loh. Hosted by GitHub Pages.</a>
+			</ul>
+		</footer>
+
+		
+        <!-- Script -->
+        <script src="../../assets/js/main.js"></script>
+    </body>
+    
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+
+<html>
+	<!-- Header -->
+    <head>
+        <title>Nathan Loh - Covid</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../assets/css/main.css" />
+    </head>
+
+
+    <body class="is-preload">
+		<!-- Navigation Bar -->
+		<nav class="navbar">
+			<ul>
+				<li><a href="../../index.html">About</a></li>
+				<li><a href="../../projects.html">Projects</a></li>
+				<li><a href="../../Nathan_Loh_Resume.pdf" target="_blank">CV</a></li>
+			</ul>
+		</nav>
+
+		
+		<!-- Page Title -->
+		<div class="page-title">Predicting COVID-19</div>
+		<p style="margin-top: 1em; font-size: 14px;">
+			By Nathan Loh and Nikolaus Schultze
+		</p>
+
+		
+		<!-- Project description -->
+		<h2 style="font-size: 1.5em; font-weight: normal;">Project Description</h2>
+		<p>
+			COVID-19 has significantly shaped today's society, raising awareness about the dangers posed by bacteria, viruses, and diseases. 
+			One major challenge highlighted by the pandemic is the strain on hospital staffing and resources, as many were diverted to handle the influx of COVID-19 patients. 
+			This project aims to address some of these concerns by exploring the limitations of current COVID-19 testing methods 
+			and offering a simpler alternative to help reduce the spread of the virus. <br><br>
+			
+			Current COVID-19 tests, such as Rapid Antigen and PCR tests, can provide inconsistent results. 
+			This project aims to develop a simple COVID-19 predictor that can help individuals better assess their condition when uncertain about their illness. 
+			If an individual is predicted to have COVID-19, they should quarantine themselves rather than go out to get tested and risk spreading the virus. 
+			However, if an individual is predicted not to have COVID-19, they should proceed with proper testing to check for false positives. 
+			Ultimately, this approach can reduce the number of potentially sick individuals in public spaces and reduce the strain on testing resources. <br><br>
+
+			This project involves predicting positive and negative COVID-19 cases based on symptoms using various algorithms, 
+			including decision tree (DT), logistic regression (LR), regular regression (RR), k-nearest neighbor (KNN), as well as combinations of these methods. 
+			The combination approach utilizes a mix of DT, LR, and KNN algorithms, 
+			each trained individually on the same data set before being compared to determine the final prediction. 
+			Two distinct methods were used in this approach. The first method determines the final prediction based on the majority vote from the outputs of each algorithm. 
+			In contrast, the second method predicts COVID-positive if any of the algorithms produce a positive result. 
+			The dataset utilized for this project was sourced from Kaggle, titled 
+			<a href="https://www.kaggle.com/datasets/hemanthhari/symptoms-and-covid-presence">Symptoms and COVID Presence</a> 
+			by Hemanth Harikrishnan.
+		</p>
+
+
+		<!-- Feature Selection Description -->
+		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Feature Selection and Model Description</h2>
+
+		<figure class="image-container">
+			<img src="covid_co_matrix.png" alt="Correlation Matrix">
+			<figcaption class="caption">
+				Figure 1. Correlation matrix of predictor and response variables. 
+				Two variables show strong correlation if the coefficient value is closer to 1 and -1, and a weak correlation if the value is closer to 0.
+			</figcaption>
+		</figure>
+
+		<p>
+			<br>Through feature selection, symptoms that have coefficient values closer to 0 with the response variable are removed. 
+			These symptoms include Runny Nose, Headache, and Fatigue, which can also be symptoms commonly seen in other illnesses. 
+			After removing the weakly correlated variables, the data is randomly split into a training and testing set, 
+			where each algorithm is trained and tested five times before averaging each of the results: accuracy, precision, sensitivity, and specificity. 
+			To ensure that the machine can read and interpret the data, all values were switched from "yes" and "no" to 1 and 0. 
+			This also allows the data to be normalized and not give certain features a stronger influence on the decisions. 
+			This also helps with addressing the issues of regular regression being a continuous predictor by restricting its output to be relative to 
+			the response class values: 1 and 0. <br><br>
+
+			All algorithms are created through the scikit-learn library. 
+			Regular regression is typically not used in classification problems; however, we were curious how effective it can still predict classes. 
+			As such, we use a similar approach to logistic regression where the final prediction is set to class 1 if the value is greater than or equal to 0.5, 
+			else set the class to 0. The purpose of creating the two combination methods were to test if the accuracy and sensitivity would improve 
+			at the cost of increasing the runtime (need to train three models vs. just one). 
+			Thus, we create a method (Method 1) that would be aimed at improving accuracy through setting the output as the majority, 
+			while another method (method 2) is used to determine if we can improve the sensitivity at a cost of slightly decreasing the accuracy 
+			by setting all outputs as true if any algorithm predicted COVID-positive.
+		</p>
+
+
+		<!-- Results -->
+		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Results</h2>
+
+		<figcaption class="table-caption">
+			Table 1. Performance Comparison of Algorithms
+		</figcaption>
+		<div class="table-wrapper">
+			<div class="table-container">
+				<table class="table dynamic-table table-bordered table-striped table-hover text-center">
+					<thead>
+						<tr>
+							<th>Metric</th>
+							<th>RR</th>
+							<th>LR</th>
+							<th>DT</th>
+							<th>KNN</th>
+							<th>KNN+DT+LR Method 1</th>
+							<th>KNN+DT+LR Method 2</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><td>Accuracy</td><td>96.06%</td><td>96.01%</td><td>96.89%</td><td>96.82%</td><td>97.19%</td><td>97.09%</td></tr>
+						<tr><td>Precision</td><td>96.26%</td><td>98.14%</td><td>98.24%</td><td>97.44%</td><td>98.25%</td><td>97.52%</td></tr>
+						<tr><td>Sensitivity</td><td>99.01%</td><td>98.14%</td><td>97.91%</td><td>98.63%</td><td>98.27%</td><td>98.93%</td></tr>
+						<tr><td>Specificity</td><td>83.21%</td><td>92.11%</td><td>92.73%</td><td>89.63%</td><td>92.57%</td><td>89.28%</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+
+		<!-- Discussion of Results -->
+		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Discussion of Results</h2>
+		<p>
+			In the final comparison for each algorithm, we will primarily examine the accuracy and the sensitivity because it deals with false negative reports. 
+			False negative reports are important as we want to avoid predicting a person to be COVID-negative when they are COVID-positive. 
+			On the other hand, an individual who is predicted to not have COVID when they do will increase the spread of the virus. 
+			From the results, linear regression has the lowest accuracy; however, it is still high despite its intended purpose of predicting continuous values; 
+			it has the highest sensitivity at the cost of having the lowest specificity. The algorithm (singular) that had the best accuracy was DT, 
+			followed with KNN which had higher sensitivity. When comparing the KNN with the two combination methods, 
+			it was found that both methods produced better accuracies while Method 2 had the best sensitivity. 
+			In short, the combination approach showed slight improvements compared to using a single algorithm. 
+			The first method had a lower sensitivity, while the second one had a higher one. If we had to choose between the two methods, 
+			the second method would be better, as it sacrifices a small amount of accuracy for higher sensitivity: fewer false negative predictions. 
+			In general, KNN+DT+LR Method 1 had the best accuracy and precision, Regular Regression had the best sensitivity, and Decision Tree had the best specificity. <br><br>
+
+			Future work for this project includes in depth analysis of each feature and their correlations between other predictor variables, 
+			implementation of an interactive website or application, and introduction of more data. 
+			Despite performing feature selection through the analysis of the correlation matrix, 
+			further research and examination can be done to see if certain symptoms have an impact on other symptoms. 
+			Rather than select features that only have a direct impact to the response variable, 
+			it may be wise to also incorporate predictors that have correlations with other predictors. 
+			The implementation of an interactive website or application will be the next step in deploying the algorithm to the public and allow them to start self-diagnosing. 
+			The final future step is to incorporate more data to improve testing results. 
+			This can include adding more features to examining how COVID may be different in other countries and regions. 
+			This is important as certain strains of the virus may mutate, cause different symptoms, and dominate in specific regions, causing this algorithm to fail.
+		</p>
+
+		
+		<!-- Repository -->
+		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Project Repository</h2>
+		<a href="https://github.com/nschultze/cs584project" style="margin-left: 10%; display: inline-block; width: fit-content;">Project Repository Link</a>
+
+
+		<!-- Full Report -->
+		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">PDF Report</h2>
+		<p>
+			For a full report of the project, refer to the following pdf link: 
+			<a href="CS584 Group 37 Final Report.pdf" target="_blank" style="display: inline-block; width: fit-content;">COVID-19 Final Report</a>.
+		</p>
+		
+
+
+		<!-- Footer -->
+		<footer id="footer">
+			<ul class="copyright">
+				<a>&copy; 2025 Nathan Loh. Hosted by GitHub Pages.</a>
+			</ul>
+		</footer>
+
+        <!-- Script -->
+        <script src="../../assets/js/main.js"></script>
+    </body>
+    
+</html>

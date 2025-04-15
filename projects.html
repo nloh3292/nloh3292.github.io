@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+
+<html>
+	<!-- Header -->
+    <head>
+        <title>Nathan Loh - Projects</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+    </head>
+	 
+
+	<body class="is-preload">
+		<div class="main-content">
+			<!-- Navigation Bar -->
+			<nav class="navbar">
+				<ul>
+					<li><a href="index.html">About</a></li>
+					<li><a href="projects.html">Projects</a></li>
+					<li><a href="Nathan_Loh_Resume.pdf" target="_blank">CV</a></li>
+				</ul>
+			</nav>
+
+			<!-- Page Title -->
+			<div class="page-title">Projects</div>
+
+			<!-- Search Bar -->
+			<section class="search-container">
+				<div class="search-description">
+					Enter the project name and press Enter or click the search button.
+				</div>
+				<div style="display: flex; align-items: center;">
+					<input type="text" id="search-bar" placeholder="Search projects..." style="color: black">
+					<button class="search-button" onclick="filterProjects()">
+						<span class="fas fa-search"></span> <!-- Search icon -->
+					</button>
+				</div>
+			</section>
+
+			<!-- Projects -->
+			<div id="project-list">
+				<div class="project" onclick="window.location.href='projects/covid/covid_project.html'">
+					<img src="projects/covid/covid_cover.jpg" alt="Predicting COVID-19">
+					<h3>Covid-19 Prediction</h3>
+					<p>Predicting and comparing Covid-19 algorithms based on symptoms.</p>
+				</div>
+			
+				<div class="project" onclick="window.location.href='projects/fingerprint/fingerprint_project.html'">
+					<img src="projects/fingerprint/fingerprint_cover.jpeg" alt="Fingerprint Recognition">
+					<h3>Fingerprint Recognition</h3>
+					<p>A deep learning model for fingerprint-based authentication.</p>
+				</div>
+			
+				<div class="project" onclick="window.location.href='projects/wildfire/wildfire_project.html'">
+					<img src="projects/wildfire/wildfire_cover.jpg" alt="Wildfire Detection">
+					<h3>Wildfire Detection</h3>
+					<p>Using computer vision to detect wildfires from satellite images.</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer -->
+		<footer id="footer">
+			<ul class="copyright">
+				<a>&copy; 2025 Nathan Loh. Hosted by GitHub Pages.</a>
+			</ul>
+		</footer>
+
+		<!-- Script -->
+		<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
