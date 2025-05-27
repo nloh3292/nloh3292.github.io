@@ -3,6 +3,17 @@
 <html>
 	<!-- Header -->
     <head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-LV78XCPT7L"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+		
+			gtag('config', 'G-LV78XCPT7L');
+		</script>
+
+		<!-- Title -->
         <title>Nathan Loh - Wildfire</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -404,6 +415,82 @@
 			As noted, there are significant improvements from CNNs to Transformers.
 		</figcaption>
 		
+
+		<!-- Discussion of Results -->
+		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Discussion of Results</h2>
+		<p>
+			In our study comparing three primary architectures—Convolutional Neural Networks (CNNs), Vision Transformers (ViT), 
+			and a hybrid model combining both aspects, we evaluated each model's performance using accuracy, precision, recall, and F1 score. 
+			While the comparison offers insights into the relative strengths and weaknesses of each approach, 
+			it is important to note that our conclusions are based on validation loss and accuracy rather than the final testing results. 
+			Further hyperparameter tuning could lead to improved performance for all models. <br> <br>
+
+			The CNN architecture was implemented in three variants: simple, complex, and pre-trained. 
+			Results indicated a steady improvement in accuracy as complexity increased, ranging from 84.63% to 88.54%. 
+			All CNN models showed higher recall than precision, suggesting a greater tendency to produce false negatives, 
+			which may be influenced by the imbalanced dataset containing more no-fire images. 
+			Additionally, training and validation losses fluctuated, 
+			hinting at potential optimization through methods such as learning rate scheduling to encourage more stable convergence. <br><br>
+
+			The ViT model delivered strong and consistent performance across all evaluation metrics, with minimal variation between precision, recall, and F1 scores. 
+			Interestingly, the test set performance occasionally exceeded validation performance, 
+			and the model trained on the mixed dataset (wildfire and fire images) achieved a slightly higher maximum validation F1-score than the original dataset model. 
+			These results imply the ViT's robustness and its ability to generalize well, even when exposed to varied datasets. 
+			Notably, the mixed dataset ViT model was not specifically tuned, suggesting further gains could be made with dedicated hyperparameter optimization. <br><br>
+
+			The hybrid approach, combining CNN and Transformer elements, comprises of two different models: 
+			one trained on the Wildfire dataset and another on a combination of Wildfire and FIRE datasets. 
+			Due to limited GPU availability, the model trained on the mixed dataset was only trained for 20 epochs; 
+			however, while the validation loss is still decreasing and the validation accuracy is increasing, it suggests that extended training could enhance results. 
+			While the initial model trained only on the Wildfire dataset performed better in some metrics, 
+			incorporating the FIRE dataset introduced a significant performance drop, highlighting the need for better model adaptation to new data. <br><br>
+
+			Overall, both the ViT and hybrid models outperformed the CNNs across all categories, 
+			demonstrating the effectiveness of transformer-based approaches in wildfire detection. 
+			The ViT model, in particular, showed strong baseline performance with minimal tuning. 
+			However, the hybrid approach remains promising, especially with more comprehensive hyperparameter tuning and extended training, 
+			and may eventually surpass the pure transformer model in future iterations.
+		</p>
+
+
+		<!-- Conclusions -->
+		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Conclusions</h2>
+		<p>
+			In conclusion, exploring diverse architectural frameworks for wildfire detection sheds light on critical nuances in model performance. 
+			The comparative analysis spanning simple and complex CNN designs, the Vision Transformer (ViT), and a hybrid model 
+			demonstrates the dynamic interplay between model complexity and accuracy. 
+			While CNNs demonstrated incremental improvements, ViT and the hybrid model presented better results. <br><br>
+
+			The outcomes underscore the transformative potential of transformer-based architectures, as exemplified by ViT, and the synergies achieved through hybrid models. 
+			However, challenges in integrating new datasets reveal the importance of detailed adjustments and prolonged training. 
+			The study's significance lies in guiding future endeavors, encouraging further fine-tuning, exploring diverse datasets, 
+			and providing an extended understanding of the intricate dynamics between architectural choices and model performance. 
+			As we advance, this research provides a foundation for developing more refined and adaptable wildfire detection models, 
+			crucial for addressing real-world fire prevention and management challenges.
+		</p>
+
+
+		<!-- Future Work -->
+		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Future Work</h2>
+		<p>
+			Future work could involve more extensive training sessions to refine model performance for all models. 
+			Greater exposure to the dataset during training may reveal patterns in the data and contribute to the overall robustness of the models. 
+			Additionally, a thorough exploration of hyperparameter tuning and model architectures could uncover optimal configurations, 
+			presenting an opportunity for fine-tuning to enhance each model's effectiveness in fire detection tasks. <br><br>
+
+			Acquiring additional computational resources is crucial to bolster the experiment's scope further. 
+			Increased computational capabilities would support the exploration of more complex neural network architectures and expedite the training process, 
+			allowing for the implementation of intricate models that may unveil latent features within the data. 
+			Moreover, future efforts should explore diverse datasets beyond the current scope, 
+			introducing new challenges and environments to assess the models' adaptability and generalization capabilities. <br><br>
+
+			We can also utilize the 755 'fire '-labeled images from the 'fire' dataset available on Kaggle and retrain the Simple CNN, Complex CNN, and pre-trained CNN. 
+			These additional images, showcasing fires in buildings and smoke rising from non-wildfire backgrounds, 
+			are introduced to assess the impact of appending diverse fire scenarios to the training dataset. 
+			This augmented dataset is anticipated to yield insights into their adaptability to various fire-related contexts, 
+			contributing to a more comprehensive understanding of their performance in real-world scenarios.
+		</p>
+
 
 		<!-- Repository -->
 		<h2 style="font-size: 1.5em; font-weight: normal; margin-top: 25px;">Project Repository</h2>
